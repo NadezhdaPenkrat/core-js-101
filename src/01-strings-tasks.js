@@ -18,8 +18,8 @@
  *   'aa',''    => 'aa'
  *   '',  'bb'  => 'bb'
  */
-function concatenateStrings(value1, value2 ) {
-  return value1 + value2
+function concatenateStrings(value1, value2) {
+  return value1 + value2;
 }
 
 
@@ -34,8 +34,8 @@ function concatenateStrings(value1, value2 ) {
  *   'b'     => 1
  *   ''      => 0
  */
-function getStringLength(value ) {
-  return value.length
+function getStringLength(value) {
+  return value.length;
 }
 
 /**
@@ -51,8 +51,8 @@ function getStringLength(value ) {
  *   'John','Doe'      => 'Hello, John Doe!'
  *   'Chuck','Norris'  => 'Hello, Chuck Norris!'
  */
-function getStringFromTemplate(firstName, lastName ) {
-  return 'Hello, ' + firstName +' '+lastName+'!';
+function getStringFromTemplate(firstName, lastName) {
+  return `Hello, ${firstName} ${lastName}!`;
 }
 
 /**
@@ -65,13 +65,8 @@ function getStringFromTemplate(firstName, lastName ) {
  *   'Hello, John Doe!' => 'John Doe'
  *   'Hello, Chuck Norris!' => 'Chuck Norris'
  */
-function extractNameFromTemplate(value ) {
-  const s1 = 'Hello, ';
-  if (value.includes(s1)){
-     if (value.includes('!')) {
-          return value.slice(s1.length, value.lastIndexOf('!'));
-     } 
-  }
+function extractNameFromTemplate(value) {
+  return value.replace('Hello, ', '').replace('!', '');
 }
 
 
@@ -100,7 +95,7 @@ function getFirstChar(value) {
  *   'cat'              => 'cat'
  *   '\tHello, World! ' => 'Hello, World!'
  */
-function removeLeadingAndTrailingWhitespaces( value ) {
+function removeLeadingAndTrailingWhitespaces(value) {
   return value.trim();
 }
 
@@ -115,7 +110,7 @@ function removeLeadingAndTrailingWhitespaces( value ) {
  *   'A', 5  => 'AAAAA'
  *   'cat', 3 => 'catcatcat'
  */
-function repeatString( value, count ) {
+function repeatString(value, count) {
   return value.repeat(count);
 }
 
@@ -131,8 +126,8 @@ function repeatString( value, count ) {
  *   'I like legends', 'end' => 'I like legs',
  *   'ABABAB','BA' => 'ABAB'
  */
-function removeFirstOccurrences(str, value ) {
-  return str.replace(value,'');
+function removeFirstOccurrences(str, value) {
+  return str.replace(value, '');
 }
 
 /**
@@ -146,7 +141,7 @@ function removeFirstOccurrences(str, value ) {
  *   '<span>' => 'span'
  *   '<a>' => 'a'
  */
-function unbracketTag(str ) {
+function unbracketTag(str) {
   return str.substring(1, str.length - 1);
 }
 
@@ -161,7 +156,7 @@ function unbracketTag(str ) {
  *   'Thunderstruck' => 'THUNDERSTRUCK'
  *  'abcdefghijklmnopqrstuvwxyz' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
  */
-function convertToUpperCase( str ) {
+function convertToUpperCase(str) {
   return str.toUpperCase();
 }
 
@@ -180,7 +175,7 @@ function convertToUpperCase( str ) {
  *   ],
  *   'info@gmail.com' => ['info@gmail.com']
  */
-function extractEmails(str ) {
+function extractEmails(str) {
   return str.split(';');
 }
 
@@ -207,11 +202,11 @@ function extractEmails(str ) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(width, height ) {
-  let head = `┌${'─'.repeat(width-2)}┐\n`;
-    let midle = `│${' '.repeat(width-2)}│\n`;
-    let foot = `└${'─'.repeat(width-2)}┘\n`;
-    return head + midle.repeat(height-2) + foot;
+function getRectangleString(width, height) {
+  const head = `┌${'─'.repeat(width - 2)}┐\n`;
+  const midle = `│${' '.repeat(width - 2)}│\n`;
+  const foot = `└${'─'.repeat(width - 2)}┘\n`;
+  return head + midle.repeat(height - 2) + foot;
 }
 
 
@@ -231,15 +226,37 @@ function getRectangleString(width, height ) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(str ) {
-  const abcNorm = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-   const abcRor13 = 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm';
-   let strEncode = '';
-   for(let i of str){
-       let index = abcNorm.indexOf(i);
-       strEncode += index === -1 ? i : abcRor13[index];
-   }
-   return strEncode;
+function encodeToRot13(str) {
+  const shift = 13;
+
+  return str
+    .split('')
+    .map((e) => {
+      const code = e.charCodeAt(0);
+      let shiftedCharCode = null;
+
+      if (code >= 97 && code <= 122) {
+        if (code + shift > 122) {
+          (shiftedCharCode = ((code + shift) % 122) + 96);
+        } else {
+          shiftedCharCode = code + shift;
+        }
+      } else if (code >= 65 && code <= 90) {
+        if (code + shift > 90) {
+          (shiftedCharCode = ((code + shift) % 90) + 64);
+        } else {
+          shiftedCharCode = code + shift;
+        }
+      } else {
+        return e;
+      }
+
+      // eslint-disable-next-line no-param-reassign
+      e = String.fromCharCode(shiftedCharCode);
+
+      return e;
+    })
+    .join('');
 }
 
 /**
@@ -255,8 +272,8 @@ function encodeToRot13(str ) {
  *   isString('test') => true
  *   isString(new String('test')) => true
  */
-function isString(value ) {
-  return typeof value === "string" || value instanceof String;
+function isString(value) {
+  return typeof value === 'string' || value instanceof String;
 }
 
 
@@ -284,14 +301,14 @@ function isString(value ) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(value ) {
+function getCardId(value) {
   const cardsArray = [
-    'A♣','2♣','3♣','4♣','5♣','6♣','7♣','8♣','9♣','10♣','J♣','Q♣','K♣',
-    'A♦','2♦','3♦','4♦','5♦','6♦','7♦','8♦','9♦','10♦','J♦','Q♦','K♦',
-    'A♥','2♥','3♥','4♥','5♥','6♥','7♥','8♥','9♥','10♥','J♥','Q♥','K♥',
-    'A♠','2♠','3♠','4♠','5♠','6♠','7♠','8♠','9♠','10♠','J♠','Q♠','K♠'
-];
-return cardsArray.indexOf(value);
+    'A♣', '2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10♣', 'J♣', 'Q♣', 'K♣',
+    'A♦', '2♦', '3♦', '4♦', '5♦', '6♦', '7♦', '8♦', '9♦', '10♦', 'J♦', 'Q♦', 'K♦',
+    'A♥', '2♥', '3♥', '4♥', '5♥', '6♥', '7♥', '8♥', '9♥', '10♥', 'J♥', 'Q♥', 'K♥',
+    'A♠', '2♠', '3♠', '4♠', '5♠', '6♠', '7♠', '8♠', '9♠', '10♠', 'J♠', 'Q♠', 'K♠',
+  ];
+  return cardsArray.indexOf(value);
 }
 
 
